@@ -1,0 +1,62 @@
+<mvc:View 
+        id="EmployeeListView"
+        height="100%"
+        controllerName="logaligroup.logalifinal2.controller.EmployeeList"
+          xmlns:form="sap.ui.layout.form"
+          xmlns:core="sap.ui.core"
+          xmlns:u="sap.ui.unified"
+          xmlns:mvc="sap.ui.core.mvc" 
+          displayBlock="true" 
+          xmlns="sap.m">
+          <Page id="ListPage" title="{i18n>employeeList}"  showNavButton="true" navButtonPress=".onNavBack" >
+
+                <content>
+                      
+                       <VBox class="sapUiMediumMarginEnd sapUiMediumMarginBegin" wrap="Wrap">
+                            <Label text="{i18n>searchCriteria}" labelFor="groupE" 
+                                   class="sapUiMediumMarginEnd sapUiMediumMarginBegin"
+                                   textAlign="Center" />
+                            <RadioButtonGroup id="GroupE" valueState="Information" columns="3">
+                                <RadioButton  id="RB1" text="{i18n>searchCriteriaName}" selected="true" />
+                                <RadioButton  id="RB2" text="{i18n>searchCriteriaLastName}" />
+                                <RadioButton  id="RB3" text="{i18n>searchCriteriaDNI}" />
+                            </RadioButtonGroup>
+                       </VBox>  
+                       <SearchField liveChange=".onSearch" width="100%" search=".onSearch" />                      
+                    <List
+                        id="EmployeeList"
+                        items="{ path : 'employeeModel>/Users', 
+                                filters :[{
+                                            path: 'SapId',
+                                            operator: 'EQ',
+                                            value1: 'daalmeida88@gmail.com'  
+                                            }                                 
+                                        ]
+                            }"
+                        selectionChange="showEmployee"
+                        mode="SingleSelectMaster"                   
+                        growing="true"
+                        growingThreshold="50"
+                        includeItemInSelection="true">
+                    
+                        <infoToolbar>                    
+                            <OverflowToolbar visible="false" id="idInfoToolbar">
+                                <Label id="idFilterLabel" />
+                            </OverflowToolbar>
+                        </infoToolbar>
+                        <items>
+                        <StandardListItem
+                            title="{employeeModel>FirstName} , {employeeModel>LastName}"
+                            description="{employeeModel>Dni}"
+                            icon=""
+                            iconDensityAware="false"
+                            iconInset="false"
+                            type="Active"
+                            />
+                        </items>
+                            
+                    </List>
+              </content>
+  		    </Page>                                    
+
+</mvc:View>               

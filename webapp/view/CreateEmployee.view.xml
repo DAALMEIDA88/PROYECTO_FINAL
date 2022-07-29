@@ -1,0 +1,207 @@
+<mvc:View 
+        height="100%"
+        controllerName="logaligroup.logalifinal2.controller.CreateEmployee"
+          xmlns:form="sap.ui.layout.form"
+          xmlns:core="sap.ui.core"
+          xmlns:u="sap.ui.unified"
+          xmlns:mvc="sap.ui.core.mvc" 
+          displayBlock="true" 
+          xmlns="sap.m">
+         <NavContainer id="wizardNavContainer">
+		    <pages>
+ <!-- ================================== PAGINA PRINCIPAL ================================================-->
+
+                 <Page id="wizardContentPage" title="{i18n>crearEmpleados}"  showNavButton="true" navButtonPress=".onNavBack">
+                    <content>
+                        	<Wizard id="CreateEmployeeWizard" class="sapUiResponsivePadding--header sapUiResponsivePadding--content"
+								complete="wizardCompletedHandler">
+                           
+                            <!-- PASO 1: Tipo de Empleado -->    
+							<WizardStep id="EmployeeTypeStep"
+										title="{i18n>employeeType}"
+										validated="true">
+
+								<MessageStrip class="sapUiSmallMarginBottom"
+										text="{i18n>employeeTypeMessage}"
+										showIcon="true"
+                                        type="Information" />
+						
+								<HBox
+										alignItems="Center"
+										justifyContent="Center"
+										width="100%">
+									<SegmentedButton
+										width="320px"
+										selectionChange="setEmployeeTypeFromSegmented">
+										<items>
+											<SegmentedButtonItem icon="sap-icon://employee-pane" text="{i18n>employeeInterno}"  width = '10rem'/>
+											<SegmentedButtonItem icon="sap-icon://employee"      text="{i18n>employeeAutonomo}" width = '10rem'/>
+											<SegmentedButtonItem icon="sap-icon://leads"         text="{i18n>employeeGerente}"  width = '10rem'/>
+										</items>
+									</SegmentedButton>
+								</HBox>
+							</WizardStep>   
+
+                            <!-- PASO 2: Datos del empleado -->  
+                            <WizardStep id="EmployeeDataStep"
+										validated="false"
+										title="{i18n>employeeData}"
+										activate="employeeInfoValidation">
+
+								<MessageStrip class="sapUiSmallMarginBottom"
+										text="{i18n>employeeDataMessage}"
+										showIcon="true"/>
+
+								<form:SimpleForm editable="true">
+									<Label text="{i18n>employeeName}" required="true" labelFor="EmployeeName"/>
+									<Input  id="EmployeeName" 
+                                            valueState="{/employeeNameState}"                                            										                                         
+                                            liveChange="employeeInfoValidation"
+                                            required="false"/>
+                                            
+
+									<Label text="{i18n>employeeLastName}" required="true"/>
+									<Input  id="EmployeeLastName"
+                                            valueState="{/employeeLastNameState}" 
+                                           	liveChange="employeeInfoValidation"
+                                            required="true"/>
+
+									<Label text="{i18n>employeeDNI}" required="true"/>
+									<Input  id="EmployeeDNI"
+                                            valueState="{/employeeDNIState}"
+                                           	liveChange="employeeInfoValidation"
+                                            visible="false"    
+                                            required="true"/>
+
+									<Label text="{i18n>employeeCIF}" required="true"/>
+									<Input  id="EmployeeCIF"
+                                            valueState="{/employeeCIFState}"
+                                           	liveChange="employeeInfoValidation"
+                                            required="true"/>
+
+                                    <Label text="{/SliderSalaryText}" />
+                                    <Slider id="EmployeeSalarySlider"                                                                                   
+                                            enableTickmarks="true"
+                                            liveChange="employeeInfoValidation"                                            
+                                            class="sapUiMediumMarginBottom" width="100%"/>
+             
+
+									<Label text="{i18n>employeeDateIn}" required="true" labelFor="EmployeeDateIn"/>
+									<DatePicker  id="EmployeeDateIn"
+                                                 change="employeeInfoValidation"
+                                                 valueState="{/employeeDateState}"
+                                                 required="true"
+                                                 value="{
+                                                            path: '/employeeDateIn',
+                                                            type: 'sap.ui.model.type.Date',
+                                                            formatOptions: {
+                                                                style: 'medium'
+                                                            }
+                                                        }"
+                                           	     />
+								</form:SimpleForm>
+							</WizardStep>
+
+                            <!-- PASO 3: Info adicional del empleado -->  
+                            <WizardStep id="EmployeeAddInfoStep"
+										validated="true"
+										title="{i18n>employeeAdditionalInfo}"
+										activate="optionalStepActivation">
+
+								<MessageStrip class="sapUiSmallMarginBottom"
+										text="{i18n>employeeAddInfoMessage}"
+										showIcon="true"/>
+                                 <form:SimpleForm editable="true">
+                                 	<Label text="{i18n>employeeComentario}"/>
+									<TextArea id="EmployeeComentario" value="{/employeeComentario}" rows="8"/>
+                                 </form:SimpleForm> 
+                                <UploadCollection id="uploadCollection" 
+                                        maximumFilenameLength="55"
+                                        maximumFileSize="10"
+                                        multiple="true"
+                                        sameFilenameAllowed="true"
+                                        instantUpload="true"
+                                        uploadUrl="/sap/opu/odata/sap/ZEMPLOYEES_SRV/Attachments"
+                                        change="onFileChange"
+                                        uploadComplete="onFileUploadComplete"
+                                        beforeUploadStarts="onFileBeforeUpload"
+                                        fileDeleted="onFileDeleted"
+                                        />     
+                            </WizardStep> 
+                        </Wizard>            
+                    </content>
+                    <footer>
+						<OverflowToolbar>
+							<ToolbarSpacer/>
+							<Button text="Cancel" press="handleWizardCancel"/>
+						</OverflowToolbar>
+					</footer>
+		         </Page>
+
+<!-- ================================== PAGINA REVIEW ================================================-->
+				<Page id="wizardReviewPage" showHeader="false">
+					<content>
+						<form:SimpleForm
+								title="{i18n>employeeType}"
+								minWidth="1024"
+								editable="false"
+								layout="ResponsiveGridLayout">
+							<form:content>
+								<Label text="{i18n>empType}"/>
+								<Text id="EmployeeTypeChosen" text="{/employeeType}"/>
+								<Link press="editStepOne" text="{i18n>edit}" />
+							</form:content>
+						</form:SimpleForm>
+
+						<form:SimpleForm
+								title="{i18n>employeeData}"
+								minWidth="1024"
+								editable="false"
+								layout="ResponsiveGridLayout">
+							<form:content>
+								<Label text="{i18n>employeeName}"/>
+								<Text id="EmployeeNameChosen" text="{/employeeName}"/>
+								<Label text="{i18n>employeeLastName}"/>
+								<Text id="EmployeeLastNameChosen" text="{/employeeLastName}"/>
+								<Label text="{= ${/employeeDNI} ? ${i18n>employeeDNI} : ${i18n>employeeCIF} }"/>
+								<Text id="EmployeeIdChosen" text="{= ${/employeeDNI} ? ${/employeeDNI} : ${/employeeCIF} }"/>
+								<Label text="{/SliderSalaryText}"/>
+								<Text id="EmployeeSalaryChosen" text="{/employeeSalary}"/>
+								<Label text="{i18n>employeeDateIn}"/>
+								<Text id="EmployeeDateInChosen" text="{
+                                                            path: '/employeeDateIn',
+                                                            type: 'sap.ui.model.type.Date',
+                                                            formatOptions: {
+                                                                style: 'medium'
+                                                            }
+                                                        }"/>                                
+								<Link press="editStepTwo" text="Edit" />
+							</form:content>
+						</form:SimpleForm>
+
+						<form:SimpleForm
+								title="{i18n>employeeAdditionalInfo}"
+								minWidth="1024"
+								editable="false"
+								layout="ResponsiveGridLayout">
+							<form:content>
+								<Label text="{i18n>employeeComentario}"/>
+								<Text id="EmployeeComentarioChosen" text="{/employeeComentario}"/>
+								<Label text="{i18n>employeeAnexo}"/>
+								<Text id="EmployeeAnexoChosen" text="{/employeeAnexos}"/>
+								<Link press="editStepThree" text="Edit" />
+							</form:content>
+						</form:SimpleForm>
+					</content>
+					<footer>
+						<Bar>
+							<contentRight>
+								<Button text="Submit" press="handleWizardSubmit"/>
+								<Button text="Cancel" press="handleWizardCancel"/>
+							</contentRight>
+						</Bar>
+					</footer>
+				</Page>                                         
+            </pages>
+		</NavContainer>
+</mvc:View>                 

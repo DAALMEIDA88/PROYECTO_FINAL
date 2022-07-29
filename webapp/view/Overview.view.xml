@@ -1,0 +1,59 @@
+<mvc:View controllerName="logaligroup.logalifinal2.controller.App"
+          xmlns:mvc="sap.ui.core.mvc" 
+          displayBlock="true" 
+          xmlns="sap.m">
+         <Page id="page" title="{i18n>title}">
+					<content>
+                        <Panel headerText="{i18n>employeePanel}" 
+                               expandAnimation="true" 
+                               expandable="true"
+                               expanded="true"
+                               backgroundDesign="Translucent"                               
+                               >                           
+                           <!-- CREAR EMPLEADO-->
+                            <GenericTile id="tileAddEmployee" 
+                                        class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+                                        header="{i18n>addEmployee}"
+                                        subheader="{i18n>subtAddEmployeee}"
+                                        
+                                        press="navigateToCreateEmployee"
+                                        >                                       
+                                            <TileContent  >
+                                                <ImageContent src="sap-icon://add-employee" />
+                                            </TileContent>
+                            </GenericTile>
+
+                            <!-- VISUALIZAR EMPLEADO-->
+                            <GenericTile id="tileLookupEmployee" 
+                                        class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+                                        header="{i18n>lookupEmployee}"
+                                        subheader="{i18n>subtLookupEmployee}"
+                                        press="navigateToEmployeeList"
+                                        >                                       
+                                            <TileContent  >
+                                                <ImageContent src="sap-icon://employee-lookup" />
+                                            </TileContent>
+                            </GenericTile>
+
+                        </Panel>
+            
+                        <Panel headerText="{i18n>pedidosPanel}"
+                               expandAnimation="true" 
+                               expandable="true"
+                               expanded="true">
+                            <!-- PEDIDOS-->
+                            <GenericTile id="tileFirmarPedido" 
+                                        class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+                                        header="{i18n>firmarPedido}"
+                                        subheader=""
+                                        press="navigateToSignOrder"
+                                        >                                       
+                                            <TileContent  >
+                                                <ImageContent src="sap-icon://signature" />
+                                            </TileContent>
+                            </GenericTile>
+                        </Panel > 
+                     </content>           
+
+				</Page>
+</mvc:View>                 

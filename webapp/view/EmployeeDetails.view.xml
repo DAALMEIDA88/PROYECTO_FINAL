@@ -1,0 +1,194 @@
+<mvc:View
+    controllerName="logaligroup.logalifinal2.controller.EmployeeDetails"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns:m="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.f"
+    xmlns:c="sap.suite.ui.commons"
+    xmlns="sap.uxap">
+    <m:Page title="{i18n>employeeDetail}" showHeader="true" >
+        <m:MessageStrip id="MsgStripInfo"	text="{i18n>initialMessageDetail}" type="Information" showIcon="true"
+                        class="sapUiMediumMarginBottom" visible="{jsonConfig>/msgStripVisible}"/> 
+
+	<ObjectPageLayout id="ObjectPageLayout"
+                      sectionTitleLevel="H1"
+					 showTitleInHeaderContent="true"
+					alwaysShowContentHeader="false"
+					preserveHeaderStateOnScroll="false"
+					headerContentPinnable="true"
+					isChildPage="true"
+					upperCaseAnchorBar="false"
+                    visible="{jsonConfig>/objectPage}"
+                    >                    
+				<headerTitle>
+					<ObjectPageDynamicHeaderTitle>
+						<expandedHeading>
+							<m:Title text="{employeeModel>FirstName} {employeeModel>LastName}" 
+                                     wrapping="true" 
+                                     class="sapUiSmallMarginEnd"/>
+						</expandedHeading> 
+						<snappedHeading>
+							<m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Center">
+								<m:FlexBox wrap="NoWrap" fitContainer="true" alignItems="Center" class="sapUiTinyMarginEnd">
+									<f:Avatar src="{= ${employeeModel>Type}==='0' ? 'sap-icon://employee-pane' : 
+                                                        ${employeeModel>Type}==='1' ? 'sap-icon://employee' : 
+                                                        ${employeeModel>Type}==='2' ? 'sap-icon://leads' : ''}" 
+                                              displaySize="S" 
+                                              displayShape="Square"/>
+									<m:Title text="{employeeModel>FirstName} {employeeModel>LastName}" 
+                                             wrapping="true" class="sapUiTinyMarginBegin sapUiTinyMarginEnd"/>
+								</m:FlexBox>
+							</m:FlexBox>
+						</snappedHeading>
+						<actions>
+							<m:Button
+									text="{i18n>employeeRise}"
+									type="Emphasized"                                    
+                                    icon="sap-icon://opportunities"
+									press="onRiseEmployee"/>
+							<m:Button
+									text="{i18n>employeeDismiss}"
+									type="Emphasized"                                    
+                                    icon="sap-icon://employee-rejections"
+                                    press="onDismissEmployee"/>
+                                    
+						</actions>
+                   </ObjectPageDynamicHeaderTitle>
+				</headerTitle> 
+
+				<headerContent>
+					<m:FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch">
+						<f:Avatar src="{= ${employeeModel>Type}==='0' ? 'sap-icon://employee-pane' : 
+                                            ${employeeModel>Type}==='1' ? 'sap-icon://employee' : 
+                                            ${employeeModel>Type}==='2' ? 'sap-icon://leads' : ''}"
+								  displaySize="L"
+								  displayShape="Square"
+								  class="sapUiTinyMarginEnd">
+						</f:Avatar>
+						<m:VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+                           
+                           <m:HBox justifyContent="Start" class="sapUiSmallMarginEnd"> 
+                                <m:Label text="{i18n>employeeDNI}:" class="sapUiSmallMarginEnd" design="Bold"/>
+                                <m:Text text="{employeeModel>Dni}"/>
+                           </m:HBox>
+                           <m:HBox justifyContent="Start" class="sapUiSmallMarginEnd">
+                                <m:Label text="{i18n>employeeIdSap}:" class="sapUiSmallMarginEnd" design="Bold"/>
+                                <m:Text id="EmployeeId" text="{employeeModel>EmployeeId}"/>                           
+                           </m:HBox>                              
+                           <m:HBox justifyContent="Start" class="sapUiSmallMarginEnd">
+                            	<m:Label text="{i18n>employeeType}:" class="sapUiSmallMarginEnd" design="Bold" />
+							    <m:Text text="{= ${employeeModel>Type}==='0' ? ${i18n>employeeInterno} : 
+                                                ${employeeModel>Type}==='1' ? ${i18n>employeeAutonomo} : 
+                                                ${employeeModel>Type}==='2' ? ${i18n>employeeGerente} : ''}"/> 
+                           </m:HBox> 
+                           <m:HBox justifyContent="Start" class="sapUiSmallMarginEnd">
+                                <m:Label text="{i18n>employeeDateIn}:" class="sapUiSmallMarginEnd" design="Bold"/>
+                                <m:Text text="{
+                                                path: 'employeeModel>CreationDate',
+                                                type: 'sap.ui.model.type.Date',
+                                                formatOptions: {
+                                                    style: 'long'
+                                                }
+                                            }"/>                           
+                           </m:HBox>                             
+                           <m:HBox justifyContent="Start" class="sapUiSmallMarginEnd">
+                                <m:Label text="{i18n>employeeComentario}:" class="sapUiSmallMarginEnd" design="Bold"/>
+                                <m:Text text="{employeeModel>Comments}"/>                           
+                           </m:HBox>  
+
+						</m:VBox>
+					</m:FlexBox>
+				</headerContent>               
+
+		<sections>
+
+			<ObjectPageSection title="" >
+                <customAnchorBarButton>
+                    <m:Button icon="sap-icon://attachment" text="{i18n>employeeAttachments}" />
+                </customAnchorBarButton>
+				<subSections>
+					<ObjectPageSubSection>
+						<blocks>
+                                <m:UploadCollection id="uploadCollection" 
+                                        maximumFilenameLength="55"
+                                        maximumFileSize="10"
+                                        multiple="true"
+                                        sameFilenameAllowed="true"
+                                        instantUpload="true"
+                                        uploadUrl="/sap/opu/odata/sap/ZEMPLOYEES_SRV/Attachments"
+                                        change="onFileChange"
+                                        uploadComplete="onFileUploadComplete"
+                                        beforeUploadStarts="onFileBeforeUpload"
+                                        fileDeleted="onFileDeleted"
+                                        />   
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection title="{i18n>empoyeeHistorial}">
+                 <customAnchorBarButton>
+                    <m:Button icon="sap-icon://money-bills" text="{i18n>empoyeeHistorial}" />
+                </customAnchorBarButton>           
+				<subSections>
+					<ObjectPageSubSection>
+						<blocks >
+                           <m:Panel class="sapUxAPObjectPageSubSectionAlignContent" width="auto">
+                          
+                                <c:Timeline
+                                        id="Timeline"
+                                        enableDoubleSided="false"
+                                        groupBy="CreationDate"
+                                        groupByType="Year"
+                                        growingThreshold="0"
+                                        filterTitle=""
+                                        showHeaderBar="false"
+                                        showItemFilter="false"                                        
+                                        sortOldestFirst="false"
+                                        textHeight="None"                                        
+                                        alignment="Left"
+                                        content="{ path : 'employeeModel>/Salaries', 
+                                                    filters :[{
+                                                                path: 'SapId',
+                                                                operator: 'EQ',
+                                                                value1: 'daalmeida88@gmail.com'  
+                                                                }                                    
+                                                            ]
+                                                }">
+                                    <c:content>
+                                        <c:TimelineItem
+                                                id="TimelineItem"
+                                                userName="{employeeModel>Amount}"
+                                                dateTime="{employeeModel>CreationDate}"
+                                                text=" {employeeModel>Comments} , {employeeModel>Waers}"                                                
+                                                filterValue="{employeeModel>EmployeeId}"
+                                                icon="sap-icon://lead"
+                                                >
+                                        </c:TimelineItem>
+                                    </c:content>
+                                    <c:filterList>
+                                        <c:TimelineFilterListItem
+                                            id="TimelineFilterListItem"                                            
+                                            key="{employeeModel>EmployeeId}"
+                                            visible="false"
+                                            >
+                                        </c:TimelineFilterListItem>
+                                    </c:filterList>
+
+                                </c:Timeline>
+
+                              </m:Panel>
+
+
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+        </sections>  
+
+	</ObjectPageLayout>
+    </m:Page>
+</mvc:View> 

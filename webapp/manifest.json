@@ -1,0 +1,163 @@
+{
+    "_version": "1.12.0",
+    "sap.app": {
+        "id": "logaligroup.logalifinal2",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap-ux/fiori-freestyle-writer:basic",
+            "version": "0.11.15",
+            "toolsId": "eec35228-dd0c-4493-89b8-a615ce739fab"
+        },
+        "dataSources": {
+            "ZEMPLOYEES_SRV": {
+                "uri": "/sap/opu/odata/sap/ZEMPLOYEES_SRV/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": false,
+        "dependencies": {
+            "minUI5Version": "1.102.1",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "logaligroup.logalifinal2.i18n.i18n"
+                }
+            },
+            "employeeModel": {
+                "type": "sap.ui.model.odata.v2.ODataModel",
+                "dataSource": "ZEMPLOYEES_SRV",
+                "preload": true,
+                "settings": {
+                    "defaultOperationMode": "Server",
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Request",
+                    "refreshAfterChange": false,
+                    "useBatch": false,
+                    "defaultUpdateMethod": "Put"
+                }
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "logaligroup.logalifinal2.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "RouteApp",
+                    "pattern": "",
+                    "target": ["TargetOverview"]
+                },
+                {
+                   "name": "CreateEmployee",
+                   "pattern": "CreateEmployee",
+                   "target": ["TargetCreateEmployee"]
+                },
+                {
+                    "name": "MainEmployeeList",
+                    "pattern": "MainEmployeeList",
+                    "target": ["TargetMainEmployeeList"]
+                 },
+                 {
+                     "name": "SignOrder",
+                     "pattern": "SignOrder",
+                     "target": ["TargetSignOrder"]
+                  }
+            ],
+            "targets": {
+				"TargetOverview": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewId": "Overview",
+					"viewName": "Overview"
+				},
+                "TargetCreateEmployee": {
+					"viewType": "XML",
+					"transition": "flip",
+					"clearControlAggregation": false,
+					"viewId": "CreateEmployee",
+					"viewName": "CreateEmployee"
+				}, 
+                "TargetMainEmployeeList": {
+					"viewType": "XML",
+					"transition": "fade",
+					"clearControlAggregation": false,
+					"viewId": "MainEmployeeList",
+					"viewName": "MainEmployeeList"
+				}, 
+                "TargetSignOrder": {
+					"viewType": "XML",
+					"transition": "show",
+					"clearControlAggregation": false,
+					"viewId": "SignOrder",
+					"viewName": "SignOrder"
+				}                              
+			}
+        },
+        "rootView": {
+            "viewName": "logaligroup.logalifinal2.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "app"
+        }
+    }
+}
